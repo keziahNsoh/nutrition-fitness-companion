@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Add Food Item</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label>Food Item</label>
+                        {{ form.food_item }}
+                    </div>
+                    <div class="mb-3">
+                        <label>Serving Size (grams)</label>
+                        {{ form.serving_size }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Food Item</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>Search Food Database</h3>
+            </div>
+            <div class="card-body">
+                <form method="get">
+                    <div class="mb-3">
+                        <label>Search Query</label>
+                        {{ search_form.query }}
+                    </div>
+                    <div class="mb-3">
+                        <label>Category</label>
+                        {{ search_form.category }}
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Meal Plan: {{ meal_plan.name }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Date:</strong> {{ meal_plan.date }} | 
+                    <strong>Meal Type:</strong> {{ meal_plan.get_meal_type_display }}
+                </div>
+                <div class="mb-3">
+                    <h4>Nutritional Totals</h4>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="badge bg-primary">Calories: {{ meal_plan.total_calories }} kcal</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="badge bg-success">Protein: {{ meal_plan.total_protein }}g</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="badge bg-warning">Carbs: {{ meal_plan.total_carbs }}g</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="badge bg-danger">Fat: {{ meal_plan.total_fat }}g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Food Items</h4>
+                {% if meal_plan_items %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Food Item</th>
+                                <th>Serving Size</th>
+                                <th>Calories</th>
+                                <th>Protein</th>
+                                <th>Carbs</th>
+                                <th>Fat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in meal_plan_items %}
+                            <tr>
+                                <td>{{ item.food_item.name }}</td>
+                                <td>{{ item.serving_size }}g</td>
+                                <td>{{ item.calories }}</td>
+                                <td>{{ item.protein }}</td>
+                                <td>{{ item.carbs }}</td>
+                                <td>{{ item.fat }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No food items added to this meal plan yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

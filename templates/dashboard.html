@@ -1,0 +1,141 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Welcome, {{ user.first_name|default:user.username }}!</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Nutrition Section -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Nutrition</h3>
+                    <a href="{% url 'nutrition_dashboard' %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+                <div class="card-body">
+                    {% if nutrition_goal %}
+                        <div class="progress-group mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>Daily Calorie Target</strong>
+                                <span>{{ nutrition_goal.daily_calorie_target }} kcal</span>
+                            </div>
+                        </div>
+                        
+                        <h4>Recent Meal Plans</h4>
+                        {% for meal_plan in recent_meal_plans %}
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span>{{ meal_plan.name }}</span>
+                                <span>{{ meal_plan.total_calories }} kcal</span>
+                            </div>
+                        {% empty %}
+                            <p>No recent meal plans</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>No nutrition goals set. <a href="{% url 'set_nutrition_goal' %}">Set Goals</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Fitness Section -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Fitness</h3>
+                    <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+                <div class="card-body">
+                    {% if fitness_goal %}
+                        <div class="progress-group mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>Weekly Workout Goal</strong>
+                                <span>{{ fitness_goal.weekly_workout_goal }} sessions</span>
+                            </div>
+                        </div>
+                        
+                        <h4>Recent Workouts</h4>
+                        {% for workout in recent_workouts %}
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span>{{ workout.workout_type }}</span>
+                                <span>{{ workout.duration }} mins</span>
+                            </div>
+                        {% empty %}
+                            <p>No recent workouts</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>No fitness goals set. <a href="#">Set Goals</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Metrics Section -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Health</h3>
+                    <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_health_metrics %}
+                        {% for metric in recent_health_metrics %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <strong>Weight</strong>
+                                    <span>{{ metric.weight }} kg</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Body Fat %</strong>
+                                    <span>{{ metric.body_fat_percentage }}%</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No recent health metrics. <a href="#">Add Metrics</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Quick Actions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="{% url 'create_meal_plan' %}" class="btn btn-outline-success btn-block mb-2">
+                                Create Meal Plan
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-outline-primary btn-block mb-2">
+                                Log Workout
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-outline-info btn-block mb-2">
+                                Track Health
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'set_nutrition_goal' %}" class="btn btn-outline-warning btn-block mb-2">
+                                Update Goals
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
