@@ -42,6 +42,7 @@ class MealLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     meal_type = models.ForeignKey(MealType, on_delete=models.PROTECT)
     date = models.DateField(auto_now_add=True)
+    name = models.FloatField(default=0)
     total_calories = models.FloatField(default=0)
     total_protein = models.FloatField(default=0)
     total_carbohydrates = models.FloatField(default=0)

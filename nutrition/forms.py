@@ -5,7 +5,7 @@ from .models import MealLog, NutritionGoal, MealPlan, FoodItem, MealPlanItem
 class MealLogForm(forms.ModelForm):
     class Meta:
         model = MealLog
-        fields = ["name", "calories", "date"]
+        fields = ["name", "total_calories"]
 
     def clean_name(self):
         name = self.cleaned_data.get("name")
@@ -109,9 +109,9 @@ class MealPlanItemForm(forms.ModelForm):
 
     class Meta:
         model = MealPlanItem
-        fields = ["food_item", "serving_size"]
+        fields = ["food_item", "quantity"]
         widgets = {
-            "serving_size": forms.NumberInput(
+            "quantity": forms.NumberInput(
                 attrs={"class": "form-control", "step": "0.1"}
             )
         }
@@ -131,6 +131,13 @@ class FoodItemSearchForm(forms.Form):
     category = forms.ChoiceField(
         required=False,
         choices=[("", "All Categories")]
-        + FoodItem.objects.values_list("category", "category").distinct(),
+        + list(FoodItem.objects.values_list("category", "category").distinct()),
         widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+class AddMealPlanItemsForm(forms.Form):
+    food_item = forms.ModelChoiceField(
+        queryset=FoodItem.objects.all(),
+        label="Select a food item to add",
+        widget=forms.Select(attrs={'class': 'form-control'})
     )

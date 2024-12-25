@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Item Database</title>
+</head>
+<body>
+    <h1>Food Item Database</h1>
+    <ul>
+        {% for food_item in food_items %}
+            <li>{{ food_item.name }} - {{ food_item.calories }} calories</li>
+        {% empty %}
+            <li>No food items found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
 {% extends 'base.html' %}
 
 {% block content %}
