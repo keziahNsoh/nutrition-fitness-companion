@@ -4,17 +4,14 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse
-from django.core.paginator import Paginator
-from .models import FoodCategory, FoodItem, MealLog, MealPlan, NutritionGoal
-from .forms import MealLogForm, MealPlanForm, AddMealPlanItemsForm, NutritionGoalForm
+from django.urls import reverse  # Corrected import
 
 # Login view
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            user = form.get_user()
+            user = form.get_user()  # Corrected indentation here
             login(request, user)
             messages.success(request, "Login successful!")
             return redirect(request.GET.get("next", "/"))  # Redirect to the previous page or home
@@ -23,6 +20,26 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, "users/login.html", {"form": form})
+
+@login_required
+def homepage(request):
+    # Check if the user has a profile
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = None
+
+    # Fetch the user's meal logs
+    meal_logs = MealLog.objects.filter(user=request.user).order_by('-date')[:5]
+
+    # Pass context data to the template
+    context = {
+        'meal_logs': meal_logs,
+        'fitness_goal': profile.fitness_goal if profile and profile.fitness_goal else 'Not set yet',
+        'bmi': profile.bmi if profile and profile.bmi else 'Not set yet',
+    }
+
+    return render(request, 'homepage.html', context)
 
 # View to display all food categories
 def food_categories(request):
@@ -194,3 +211,4 @@ def edit_meal_plan(request, meal_plan_id):
 def user_profile(request):
     user_profile = request.user.profile  # Assuming you have a related profile model
     return render(request, "users/profile.html", {"profile": user_profile})
+

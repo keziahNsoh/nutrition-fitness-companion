@@ -1,7 +1,31 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.validators import MinValueValidator
 
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='nutrition_profile')
+    fitness_goal = models.CharField(max_length=200, null=True, blank=True)
+    bmi = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+class NutritionLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    meal = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.meal} on {self.date}"
+
+class Activity(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    activity = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.activity} on {self.date}"
 
 class FoodCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -9,7 +33,6 @@ class FoodCategory(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class FoodItem(models.Model):
     name = models.CharField(max_length=200)

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 
@@ -38,12 +39,10 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-
-# Profile model moved outside CustomUser class
 class Profile(models.Model):
     user = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE
-    )  # Use CustomUser instead of User
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='account_profile'
+    )  # Use related_name to avoid conflict with other Profile models
     bio = models.TextField(blank=True)
 
     def __str__(self):
