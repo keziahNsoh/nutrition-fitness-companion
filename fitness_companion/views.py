@@ -11,6 +11,8 @@ from health.models import HealthMetric
 def home(request):
     user = request.user
 
+    print('i am loading the home page')
+
     # Handle case where the user doesn't have a profile
     try:
         profile = Profile.objects.get(user=user)

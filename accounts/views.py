@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+
+from fitness.models import WorkoutExercise
+from nutrition.models import NutritionGoal
 from .models import Profile
 from .forms import CustomUserCreationForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
@@ -16,9 +19,14 @@ def home(request):
     except Profile.DoesNotExist:
         profile = None  # If profile doesn't exist, set it to None
 
+    nutrition_goal = NutritionGoal.objects.get(user=request.user)
+    # get the latest 1 workout exercise
+    latest_workout_exercise = WorkoutExercise.objects.filter(workout_log__user=user).order_by("-workout_log__date").first()
     context = {
         "user": user,
         "profile": profile,
+        "nutrition_goal": nutrition_goal,
+        "latest_workout_exercise": latest_workout_exercise,
         "fitness_goal": user.fitness_goal
         or "Not set",  # user.fitness_goal is from CustomUser
         "bmi": user.calculate_bmi()

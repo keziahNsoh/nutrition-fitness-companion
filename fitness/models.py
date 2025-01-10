@@ -18,6 +18,7 @@ class Exercise(models.Model):
         ("advanced", "Advanced"),
     ]
 
+    created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=200)
     category = models.ForeignKey(ExerciseCategory, on_delete=models.SET_NULL, null=True)
     description = models.TextField(blank=True)
