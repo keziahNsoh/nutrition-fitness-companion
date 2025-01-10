@@ -4,7 +4,10 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse  # Corrected import
+from django.urls import reverse
+
+from nutrition.forms import AddMealPlanItemsForm, MealLogForm, MealPlanForm, NutritionGoalForm  # Corrected import
+from .models import Profile, MealLog, FoodCategory, FoodItem, NutritionGoal, MealPlan
 
 # Login view
 def login_view(request):
@@ -23,23 +26,43 @@ def login_view(request):
 
 @login_required
 def homepage(request):
-    # Check if the user has a profile
     try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = None
+        nutrition_goal = NutritionGoal.objects.get(user=request.user)
+    except NutritionGoal.DoesNotExist:
+        nutrition_goal = None
+    if request.method == 'POST':
+        form = NutritionGoalForm(request.POST)
+        # print user
+        if form.is_valid():
+            nutrition_goal_data = form.cleaned_data
+            NutritionGoal.objects.update_or_create(
+                user=request.user,
+                defaults=nutrition_goal_data
+            )
+            return redirect('home')  # replace 'success_url' with your success URL
+    else:
+        form = NutritionGoalForm(instance=nutrition_goal)
+    return render(request, 'set_nutrition_goal.html', {'form': form})
 
-    # Fetch the user's meal logs
-    meal_logs = MealLog.objects.filter(user=request.user).order_by('-date')[:5]
+# @login_required
+# def homepage(request):
+#     # Check if the user has a profile
+#     try:
+#         profile = Profile.objects.get(user=request.user)
+#     except Profile.DoesNotExist:
+#         profile = None
 
-    # Pass context data to the template
-    context = {
-        'meal_logs': meal_logs,
-        'fitness_goal': profile.fitness_goal if profile and profile.fitness_goal else 'Not set yet',
-        'bmi': profile.bmi if profile and profile.bmi else 'Not set yet',
-    }
+#     # Fetch the user's meal logs
+#     meal_logs = MealLog.objects.filter(user=request.user).order_by('-date')[:5]
 
-    return render(request, 'homepage.html', context)
+#     # Pass context data to the template
+#     context = {
+#         'meal_logs': meal_logs,
+#         'fitness_goal': profile.fitness_goal if profile and profile.fitness_goal else 'Not set yet',
+#         'bmi': profile.bmi if profile and profile.bmi else 'Not set yet',
+#     }
+
+#     return render(request, 'set_nutrition_goal.html', context)
 
 # View to display all food categories
 def food_categories(request):
@@ -91,10 +114,10 @@ def add_meal_log(request):
 @login_required
 def meal_log_list(request):
     meal_logs = MealLog.objects.filter(user=request.user).select_related('user').order_by("-date")
-    paginator = Paginator(meal_logs, 10)  # Show 10 logs per page
+    # paginator = Paginator(meal_logs, 10)  # Show 10 logs per page
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, "nutrition/meal_log_list.html", {"page_obj": page_obj})
+    # page_obj = paginator.get_page(page_number)
+    return render(request, "nutrition/meal_log_list.html", {"page_obj": meal_logs})
 
 # View to set a nutrition goal
 @login_required

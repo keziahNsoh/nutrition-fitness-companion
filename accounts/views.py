@@ -49,8 +49,13 @@ def login_view(request):
 
         if username and password:  # Ensure both fields are provided
             user = authenticate(request, username=username, password=password)
+            print("trying to authenticate")
+            # log user to console
+            print(f"User {user} trying to authenticate")
             if user is not None:
                 login(request, user)
+                # log to console 
+                print(f"User {user} logged in")
                 messages.success(request, "Login successful!")
                 return redirect("home")
             else:

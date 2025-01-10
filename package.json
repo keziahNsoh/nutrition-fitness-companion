@@ -1,0 +1,13 @@
+{
+  "name": "fitness_companion",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  },
+  "scripts": {
+    "watch:css": "tailwindcss build static/css/custom.css -o static/css/output.css -w"
+  },
+  "author": "",
+  "license": "ISC"
+}
