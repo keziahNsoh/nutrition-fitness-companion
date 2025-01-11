@@ -14,7 +14,6 @@ def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
-# In apps.py, make sure to register the signal
 from django.apps import AppConfig
 
 
