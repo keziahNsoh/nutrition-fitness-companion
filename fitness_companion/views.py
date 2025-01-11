@@ -35,7 +35,6 @@ def dashboard(request):
     """
     Comprehensive user dashboard showing various health and fitness metrics
     """
-    # Nutrition Tracking
     try:
         nutrition_goal = NutritionGoal.objects.get(user=request.user)
         recent_meal_plans = MealPlan.objects.filter(user=request.user).order_by(
@@ -45,7 +44,6 @@ def dashboard(request):
         nutrition_goal = None
         recent_meal_plans = []
 
-    # Fitness Tracking
     try:
         fitness_goal = FitnessGoal.objects.get(user=request.user)
         recent_workouts = WorkoutLog.objects.filter(user=request.user).order_by(
@@ -55,12 +53,10 @@ def dashboard(request):
         fitness_goal = None
         recent_workouts = []
 
-    # Health Metrics
     recent_health_metrics = HealthMetric.objects.filter(user=request.user).order_by(
         "-date"
     )[:1]
 
-    # Progress Tracking
     context = {
         "title": "Personal Dashboard",
         "nutrition_goal": nutrition_goal,
