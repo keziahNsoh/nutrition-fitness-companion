@@ -1,41 +1,22 @@
 from django import forms
-from .models import WorkoutSession, Exercise
+from .models import Exercise, WorkoutExercise
 
 
-class WorkoutSessionForm(forms.ModelForm):
-    """
-    Form for creating and editing workout sessions.
-    Allows users to log their complete workout, including exercises.
-    """
-
-    class Meta:
-        model = WorkoutSession
-        fields = ["workout_type", "duration", "total_calories_burned", "date", "notes"]
-        widgets = {
-            "date": forms.DateInput(attrs={"type": "date"}),
-            "notes": forms.Textarea(attrs={"rows": 3}),
-        }
-
-
-class ExerciseForm(forms.ModelForm):
+class WorkoutExerciseForm(forms.ModelForm):
     """
     Form for adding individual exercises to a workout session.
     Supports detailed exercise tracking with sets, reps, and weight.
     """
 
     class Meta:
-        model = Exercise
+        model = WorkoutExercise
         fields = [
-            "exercise_name",
-            "exercise_type",
             "sets",
             "reps",
             "weight",
-            "duration",
         ]
         widgets = {
-            "exercise_name": forms.TextInput(attrs={"class": "form-control"}),
-            "exercise_type": forms.Select(attrs={"class": "form-control"}),
+            "weight": forms.Select(attrs={"class": "form-control"}),
         }
 
 
