@@ -1,6 +1,36 @@
 from django import forms
-from .models import Exercise, WorkoutExercise
+from .models import Exercise, ExerciseCategory, WorkoutExercise
 
+class ExerciseCategoryForm(forms.ModelForm):
+    """
+    Form for adding a new exercise category to the database.
+    """
+
+    class Meta:
+        model = ExerciseCategory
+        fields = ["name", "description"]
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 3}),
+        }
+
+class ExerciseForm(forms.ModelForm):
+    """
+    Form for adding a new exercise to the database.
+    """
+
+    class Meta:
+        model = Exercise
+        fields = [
+            "name",
+            "category",
+            "description",
+            "calories_burned_per_hour",
+            "difficulty",
+            "muscle_groups",
+        ]
+        widgets = {
+            "muscle_groups": forms.CheckboxSelectMultiple(),
+        }
 
 class WorkoutExerciseForm(forms.ModelForm):
     """

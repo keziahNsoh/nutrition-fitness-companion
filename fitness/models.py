@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 
 
 class ExerciseCategory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
 
@@ -18,6 +19,7 @@ class Exercise(models.Model):
         ("advanced", "Advanced"),
     ]
 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=200)
     category = models.ForeignKey(ExerciseCategory, on_delete=models.SET_NULL, null=True)
