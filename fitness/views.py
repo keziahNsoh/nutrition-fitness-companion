@@ -1,5 +1,5 @@
 from django.forms import inlineformset_factory
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -78,4 +78,31 @@ def workout_detail(request):
         "recent_workouts": [],  # Placeholder for workout logs
     }
     return render(request, "home.html", context)
+
+@login_required
+def exercise_detail(request, exercise_id):
+    exercise = get_object_or_404(Exercise, id=exercise_id)
+    return render(request, 'exercise_detail.html', {'exercise': exercise})
+
+@login_required
+def update_exercise(request, exercise_id):
+    exercise = get_object_or_404(Exercise, id=exercise_id)
+    if request.method == 'POST':
+        form = ExerciseForm(request.POST, instance=exercise)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Exercise updated successfully.')
+            return redirect('exercise_detail', exercise_id=exercise.id)
+    else:
+        form = ExerciseForm(instance=exercise)
+    return render(request, 'new_exercise.html', {'form': form, 'exercise': exercise})
+
+@login_required
+def delete_exercise(request, exercise_id):
+    exercise = get_object_or_404(Exercise, id=exercise_id)
+    if request.method == 'POST':
+        exercise.delete()
+        messages.success(request, 'Exercise deleted successfully.')
+        return redirect('fitness')
+    return render(request, 'delete_exercise.html', {'exercise': exercise})
 

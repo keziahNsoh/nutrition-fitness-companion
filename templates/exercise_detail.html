@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex-col space-y-2">
+    <h2 class="text-2xl">{{ exercise.name }} done on {{exercise.created_at}}</h2>
+    <p>Category: {{ exercise.category.name }}</p>
+    <p>Description: {{ exercise.description }}</p>
+    <p>Calories Burned per Hour: {{ exercise.calories_burned_per_hour }}</p>
+    <p>Difficulty: {{ exercise.get_difficulty_display }}</p>
+    <p>Muscle Groups: {{ exercise.muscle_groups.all|join:", " }}</p>
+    <div class="flex gap-4">
+        <a href="{% url 'update_exercise' exercise.id %}" class="bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded">Update</a>
+        <a href="{% url 'delete_exercise' exercise.id %}" class="bg-red-500 hover:bg-red-700 py-2 px-4 rounded">Delete</a>
+    </div>
+    </div>
+</div>
+{% endblock %}

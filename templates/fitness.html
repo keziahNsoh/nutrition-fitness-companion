@@ -8,15 +8,17 @@
         View Exercise Data and add new exercises and logs
     </p>
 </div>
-<div class="grid grid-cols-3 gap-4 mb-4">
+<div class="grid grid-cols-2 gap-4 mb-4">
     <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <div class="text-2xl text-gray-400 dark:text-gray-100">
+        <div class=" text-gray-400 dark:text-gray-100">
             
         {% if exercises %}
+        <p class="text-2xl">
             Exercises
-        <ul>
+        </p>
+        <ul class="text-base">
             {% for exercise in exercises %}
-            <li>{{ exercise.name }}</li>
+            <li>{{ forloop.counter }}. <a href="/fitness/exercise/{{ exercise.id }}">{{ exercise.name }}  (Click to View)</a></li>
             {% endfor %}
         </ul>
         {% else %}
@@ -26,14 +28,22 @@
         </div>
     </div>
     <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-100">
-            Protein Target: {{ nutrition_goal.protein_target }}
+        <div class=" text-gray-400 dark:text-gray-100">
+            
+        {% if workout_log %}
+        <p class="text-2xl">
+            Workout logs
         </p>
-    </div>
-    <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-100">
-            Carbs Target: {{ nutrition_goal.carbohydrate_target }}
-        </p>
+        <ul class="text-base">
+            {% for workout_log in workout_log %}
+            <li>{{ forloop.counter }}. <a href="/fitness/workout_log/{{ workout_log.id }}">{{ workout_log.name }}  (Click to View)</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No logs available</p>
+        <a href="/fitness/new_workout_log">Create new workout log</a>
+        {% endif %}
+        </div>
     </div>
 </div>
 <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">

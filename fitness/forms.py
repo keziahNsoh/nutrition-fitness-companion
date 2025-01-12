@@ -33,7 +33,7 @@ class ExerciseForm(forms.ModelForm):
         ]
         widgets = {
             "muscle_groups": forms.CheckboxSelectMultiple(),
-            "calories_burned_per_hour": forms.NumberInput(attrs={"step": "0.01"}),
+            "calories_burned_per_hour": forms.NumberInput(attrs={"step": "0.01", "class": formClass}),
             "difficulty": forms.Select(attrs={"class": formClass}),
             "category": forms.Select(attrs={"class": formClass}),
             "name": forms.TextInput(attrs={"class": formClass}),
