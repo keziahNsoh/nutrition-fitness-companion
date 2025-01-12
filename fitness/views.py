@@ -23,26 +23,40 @@ def fitness_view(request):
 
 @login_required
 def new_exercise(request):
-    ExerciseCategoryFormSet = inlineformset_factory(
-        Exercise, ExerciseCategory, form=ExerciseCategoryForm, extra=1, can_delete=False
-    )
-
     if request.method == 'POST':
-        form = ExerciseForm(request.POST)
-        formset = ExerciseCategoryFormSet(request.POST, request.FILES)
-        # print user
-        if form.is_valid() and formset.is_valid():
-            exercise = form.save(commit=False)
+        exercise_form = ExerciseForm(request.POST)
+        # category_form = ExerciseCategoryForm(request.POST)
+        if exercise_form.is_valid():
+            exercise = exercise_form.save(commit=False)
             exercise.user = request.user
             exercise.save()
-            formset.instance = exercise
-            formset.save()
             return redirect('fitness')
-        else:
-            form = ExerciseForm()
-            formset = ExerciseCategoryFormSet()
-            return render(request, 'new_exercise.html', {'form': form, 'formset': formset})
-        
+    else:
+        exercise_form = ExerciseForm()
+        category_form = ExerciseCategoryForm()
+
+    return render(request, 'new_exercise.html', {
+        'form': exercise_form,
+        'category_form': category_form
+    })
+
+@login_required
+def add_category(request):
+    if request.method == 'POST':
+        category_form = ExerciseCategoryForm(request.POST)
+        if category_form.is_valid():
+            category = category_form.save(commit=False)
+            category.user = request.user
+            category.save()
+            messages.success(request, 'Category added successfully.')
+            return redirect('fitness')
+    else:
+        category_form = ExerciseCategoryForm()
+
+    return render(request, 'add_category.html', {
+        'category_form': category_form
+    })
+
 @login_required
 def workout_history(request):
     user = request.user
@@ -64,3 +78,4 @@ def workout_detail(request):
         "recent_workouts": [],  # Placeholder for workout logs
     }
     return render(request, "home.html", context)
+

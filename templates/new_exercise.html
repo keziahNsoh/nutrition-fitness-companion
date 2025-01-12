@@ -1,10 +1,50 @@
-{% extends "base_generic.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-  <h1>Create a New Exercise</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-whiter">
+                <h2>New Exercise</h2>
+            </div>
+            <div class="card-body">
+                <form class="space-y-4 md:space-y-6" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Exercise Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Category</label>
+                            {{ form.category }}
+                        <a href="{% url 'add_category' %}" class="text-blue-500 hover:underline">Add New Category</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Difficulty</label>
+                            {{ form.difficulty }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Calories Burned per hour</label>
+                            {{ form.calories_burned_per_hour }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Muscle Groups</label>
+                            {{ form.muscle_groups }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Description</label>
+                            {{ form.description }}
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full text-blue-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" style="color: blue;">Save Exercise</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,5 +1,8 @@
 from django import forms
+
 from .models import Exercise, ExerciseCategory, WorkoutExercise
+
+formClass = "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
 class ExerciseCategoryForm(forms.ModelForm):
     """
@@ -30,7 +33,13 @@ class ExerciseForm(forms.ModelForm):
         ]
         widgets = {
             "muscle_groups": forms.CheckboxSelectMultiple(),
+            "calories_burned_per_hour": forms.NumberInput(attrs={"step": "0.01"}),
+            "difficulty": forms.Select(attrs={"class": formClass}),
+            "category": forms.Select(attrs={"class": formClass}),
+            "name": forms.TextInput(attrs={"class": formClass}),
+            "description": forms.Textarea(attrs={"class": formClass, "rows": 3}),
         }
+
 
 class WorkoutExerciseForm(forms.ModelForm):
     """
