@@ -11,38 +11,44 @@
 <div class="grid grid-cols-2 gap-4 mb-4">
     <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
         <div class=" text-gray-400 dark:text-gray-100">
-            
-        {% if exercises %}
-        <p class="text-2xl">
-            Exercises
-        </p>
-        <ul class="text-base">
-            {% for exercise in exercises %}
-            <li>{{ forloop.counter }}. <a href="/fitness/exercise/{{ exercise.id }}">{{ exercise.name }}  (Click to View)</a></li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No exercises available</p>
-        <a href="/fitness/new_exercise">Create new exercise</a>
-        {% endif %}
+
+            {% if exercises %}
+            <p class="text-2xl">
+                Exercises
+            </p>
+            <ul class="text-base">
+                {% for exercise in exercises %}
+                <li>{{ forloop.counter }}. <a href="/fitness/exercise/{{ exercise.id }}">{{ exercise.name }} (Click to
+                        View)</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No exercises available</p>
+            {% endif %}
+            <a href="/fitness/new_exercise"
+                class="mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600">Create new
+                exercise</a>
         </div>
     </div>
     <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
         <div class=" text-gray-400 dark:text-gray-100">
-            
-        {% if workout_log %}
-        <p class="text-2xl">
-            Workout logs
-        </p>
-        <ul class="text-base">
-            {% for workout_log in workout_log %}
-            <li>{{ forloop.counter }}. <a href="/fitness/workout_log/{{ workout_log.id }}">{{ workout_log.name }}  (Click to View)</a></li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No logs available</p>
-        <a href="/fitness/new_workout_log">Create new workout log</a>
-        {% endif %}
+
+            <p class="text-2xl">
+                Workout logs
+            </p>
+            {% if workout_log %}
+            <ul class="text-base">
+                {% for workout_log in workout_log %}
+                <li>{{ forloop.counter }}. <a href="/fitness/workout_detail/{{ workout_log.id }}">Workout on {{ workout_log.date }}
+                        (Click to View)</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No logs available</p>
+            {% endif %}
+            <a href="/fitness/create_workout"
+                class="mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600">Create new
+                workout log</a>
         </div>
     </div>
 </div>
@@ -91,8 +97,7 @@
 </div>
 <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
     <p class="text-2xl text-gray-400 dark:text-gray-500">
-        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 18 18">
+        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 1v16M1 9h16" />
         </svg>

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-center mt-8">
+    <div class="w-full max-w-2xl">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="bg-gray-800 text-white p-4">
+                <h2 class="text-2xl font-semibold">Workout Details</h2>
+            </div>
+            <div class="p-4">
+                <p class="mb-2"><strong>Date:</strong> {{ workout_log.date }}</p>
+                <p class="mb-2"><strong>Duration:</strong> {{ workout_log.duration }} minutes</p>
+                <p class="mb-2"><strong>Total Calories Burned:</strong> {{ workout_log.total_calories_burned }}</p>
+                <p class="mb-4"><strong>Notes:</strong> {{ workout_log.notes }}</p>
+                <h3 class="text-xl font-semibold mb-2">Exercises</h3>
+                <ul class="list-disc list-inside">
+                    {% for exercise in workout_log.exercises.all %}
+                    <li class="mb-4"></li>
+                        <p><strong>Exercise:</strong> {{ exercise.exercise.name }}</p>
+                        <p><strong>Sets:</strong> {{ exercise.sets }}</p>
+                        <p><strong>Reps:</strong> {{ exercise.reps }}</p>
+                        <p><strong>Weight:</strong> {{ exercise.weight }} kg</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

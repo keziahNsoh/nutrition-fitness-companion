@@ -3,18 +3,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
-from fitness.forms import ExerciseCategoryForm, ExerciseForm
-from fitness.models import Exercise, ExerciseCategory
+from fitness.forms import ExerciseCategoryForm, ExerciseForm, WorkoutExerciseFormSet, WorkoutLogForm
+from fitness.models import Exercise, ExerciseCategory, WorkoutLog
 
 
 @login_required
 def fitness_view(request):
     user = request.user
     exercises = Exercise.objects.all()
+    workout_log = WorkoutLog.objects.all()
     context = {
         "fitness_goal": user.fitness_goal,
         "exercises": exercises,
+        "workout_log": workout_log,
         "bmi": user.calculate_bmi(),
         "recent_nutrition_logs": [],  # Placeholder for nutrition logs
         "recent_workouts": [],  # Placeholder for workout logs
@@ -69,15 +72,9 @@ def workout_history(request):
     return render(request, "home.html", context)
 
 @login_required
-def workout_detail(request):
-    user = request.user
-    context = {
-        "fitness_goal": user.fitness_goal,
-        "bmi": user.calculate_bmi(),
-        "recent_nutrition_logs": [],  # Placeholder for nutrition logs
-        "recent_workouts": [],  # Placeholder for workout logs
-    }
-    return render(request, "home.html", context)
+def workout_detail(request, workout_id):
+    workout_log = get_object_or_404(WorkoutLog, id=workout_id, user=request.user)
+    return render(request, 'workout_detail.html', {'workout_log': workout_log})
 
 @login_required
 def exercise_detail(request, exercise_id):
@@ -105,4 +102,26 @@ def delete_exercise(request, exercise_id):
         messages.success(request, 'Exercise deleted successfully.')
         return redirect('fitness')
     return render(request, 'delete_exercise.html', {'exercise': exercise})
+
+@login_required
+def create_workout(request):
+    if request.method == 'POST':
+        workout_log_form = WorkoutLogForm(request.POST)
+        workout_exercise_formset = WorkoutExerciseFormSet(request.POST)
+        
+        if workout_log_form.is_valid() and workout_exercise_formset.is_valid():
+            workout_log = workout_log_form.save(commit=False)
+            workout_log.user = request.user
+            workout_log.save()
+            workout_exercise_formset.instance = workout_log
+            workout_exercise_formset.save()
+            return redirect(reverse('workout_detail', args=[workout_log.id]))
+    else:
+        workout_log_form = WorkoutLogForm()
+        workout_exercise_formset = WorkoutExerciseFormSet()
+
+    return render(request, 'create_workout.html', {
+        'workout_log_form': workout_log_form,
+        'workout_exercise_formset': workout_exercise_formset,
+    })
 

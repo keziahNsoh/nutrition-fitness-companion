@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Exercise, ExerciseCategory, WorkoutExercise
+from .models import Exercise, ExerciseCategory, WorkoutExercise, WorkoutLog
 
 formClass = "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
@@ -55,41 +55,50 @@ class WorkoutExerciseForm(forms.ModelForm):
             "weight",
         ]
         widgets = {
-            "weight": forms.Select(attrs={"class": "form-control"}),
+            "weight": forms.Select(attrs={"class": formClass}),
         }
 
 
-class WorkoutLogForm(forms.Form):
+class WorkoutLogForm(forms.ModelForm):
     """
     Comprehensive form for logging a complete workout with multiple exercises.
     Provides a more flexible approach to workout tracking.
     """
 
-    workout_type = forms.ChoiceField(
-        choices=[
-            ("strength", "Strength Training"),
-            ("cardio", "Cardio"),
-            ("flexibility", "Flexibility/Yoga"),
-            ("other", "Other"),
-        ],
-        widget=forms.Select(attrs={"class": "form-control"}),
-    )
-    date = forms.DateField(
-        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"})
-    )
-    total_duration = forms.IntegerField(
-        label="Total Workout Duration (minutes)",
-        widget=forms.NumberInput(attrs={"class": "form-control"}),
-    )
-    calories_burned = forms.IntegerField(
-        required=False,
-        label="Calories Burned (optional)",
-        widget=forms.NumberInput(attrs={"class": "form-control"}),
-    )
-    notes = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
-    )
+    # workout_type = forms.ChoiceField(
+    #     choices=[
+    #         ("strength", "Strength Training"),
+    #         ("cardio", "Cardio"),
+    #         ("flexibility", "Flexibility/Yoga"),
+    #         ("other", "Other"),
+    #     ],
+    #     widget=forms.Select(attrs={"class": formClass}),
+    # )
+    # date = forms.DateField(
+    #     widget=forms.DateInput(attrs={"type": "date", "class": formClass})
+    # )
+    # duration = forms.IntegerField(
+    #     label="Total Workout Duration (minutes)",
+    #     widget=forms.NumberInput(attrs={"class": formClass}),
+    # )
+    # total_calories_burned = forms.IntegerField(
+    #     required=False,
+    #     label="Calories Burned (optional)",
+    #     widget=forms.NumberInput(attrs={"class": formClass}),
+    # )
+    # notes = forms.CharField(
+    #     required=False,
+    #     widget=forms.Textarea(attrs={"rows": 3, "class": formClass}),
+    # )
+
+    class Meta:
+        model = WorkoutLog
+        fields = ['duration', 'total_calories_burned', 'notes']
+        widgets = {
+            "duration": forms.NumberInput(attrs={"class": formClass}),
+            "total_calories_burned": forms.NumberInput(attrs={"class": formClass}),
+            "notes": forms.Textarea(attrs={"rows": 3, "class": formClass}),
+        }
 
     # Dynamic exercise fields can be added programmatically if needed
     def add_exercise_fields(self, num_exercises):
@@ -101,10 +110,21 @@ class WorkoutLogForm(forms.Form):
             self.fields[f"exercise_name_{i}"] = forms.CharField(
                 label=f"Exercise {i+1} Name",
                 required=False,
-                widget=forms.TextInput(attrs={"class": "form-control"}),
+                widget=forms.TextInput(attrs={"class": formClass}),
             )
             self.fields[f"exercise_sets_{i}"] = forms.IntegerField(
                 label=f"Sets for Exercise {i+1}",
                 required=False,
-                widget=forms.NumberInput(attrs={"class": "form-control"}),
+                widget=forms.NumberInput(attrs={"class": formClass}),
             )
+
+WorkoutExerciseFormSet = forms.inlineformset_factory(
+    WorkoutLog, WorkoutExercise, fields=['exercise', 'sets', 'reps', 'weight'], extra=1,
+    can_delete=False,
+    widgets={
+        "sets": forms.NumberInput(attrs={"class": formClass}),
+        "reps": forms.NumberInput(attrs={"class": formClass}),
+        "weight": forms.NumberInput(attrs={"class": formClass}),
+        "exercise": forms.Select(attrs={"class": formClass}),
+    }
+)

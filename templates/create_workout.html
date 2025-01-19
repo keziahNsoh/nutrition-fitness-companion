@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-whiter">
+                <h2>Log your workout</h2>
+            </div>
+            <div class="card-body">
+                <form class="space-y-4 md:space-y-6" method="post">
+                    <div class="grid grid-cols-2 gap-4">
+                        {% csrf_token %}
+                        {{ workout_exercise_formset.management_form }}
+                        {% for form in workout_exercise_formset %}
+                        {{ form.as_p }}
+                        {% endfor %}
+                        {{ workout_log_form.as_p }}
+                    </div>
+                    <button type="submit"
+                        class="w-full text-blue-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        style="color: blue;">Save Exercise Log</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
