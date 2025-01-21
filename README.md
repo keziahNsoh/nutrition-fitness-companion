@@ -24,3 +24,8 @@ Fitness Dashboard
 
 Track and manage your exercises with detailed logs and insights.
 ![Screenshot 2025-01-15 163016](https://github.com/user-attachments/assets/181163b9-dafb-48b0-b6b7-adfb91b66150)
+
+
+Link to project Demo Video
+
+https://drive.google.com/file/d/16JzaZvyiTZ0gS4aZPQqE7zeUEzoSNMgJ/view?usp=sharing
