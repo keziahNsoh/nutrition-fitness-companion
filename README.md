@@ -28,4 +28,4 @@ Track and manage your exercises with detailed logs and insights.
 
 Link to project Demo Video
 
-https://drive.google.com/file/d/16JzaZvyiTZ0gS4aZPQqE7zeUEzoSNMgJ/view?usp=sharing
+https://drive.google.com/file/d/1eu_Y92YTZyvzEnIiDx23iOL8EPmObIhL/view?usp=sharing
