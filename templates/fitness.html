@@ -9,14 +9,14 @@
     </p>
 </div>
 <div class="grid grid-cols-2 gap-4 mb-4">
-    <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <div class=" text-gray-400 dark:text-gray-100">
+    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+        <div class="py-4 h-auto text-gray-400 dark:text-gray-100">
 
             {% if exercises %}
             <p class="text-2xl">
-                Exercises
+               Recent Exercises
             </p>
-            <ul class="text-base">
+            <ul class="text-base pb-4">
                 {% for exercise in exercises %}
                 <li>{{ forloop.counter }}. <a href="/fitness/exercise/{{ exercise.id }}">{{ exercise.name }} (Click to
                         View)</a></li>
@@ -26,18 +26,18 @@
             <p>No exercises available</p>
             {% endif %}
             <a href="/fitness/new_exercise"
-                class="mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600">Create new
+                class="m-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600">Create new
                 exercise</a>
         </div>
     </div>
-    <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <div class=" text-gray-400 dark:text-gray-100">
+    <div class="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+        <div class="py- h-auto4 text-gray-400 dark:text-gray-100">
 
             <p class="text-2xl">
-                Workout logs
+                Recent Workout logs
             </p>
             {% if workout_log %}
-            <ul class="text-base">
+            <ul class="text-base pb-4">
                 {% for workout_log in workout_log %}
                 <li>{{ forloop.counter }}. <a href="/fitness/workout_detail/{{ workout_log.id }}">Workout on {{ workout_log.date }}
                         (Click to View)</a></li>
@@ -47,7 +47,7 @@
             <p>No logs available</p>
             {% endif %}
             <a href="/fitness/create_workout"
-                class="mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600">Create new
+                class="m-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600">Create new
                 workout log</a>
         </div>
     </div>

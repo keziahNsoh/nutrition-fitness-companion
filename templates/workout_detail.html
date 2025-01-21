@@ -23,6 +23,9 @@
                     </li>
                     {% endfor %}
                 </ul>
+                <div class="mt-4">
+                    <a href="{% url 'delete_workout' workout_log.id %}" class="bg-red-500 text-white px-4 py-2 rounded">Delete Workout</a>
+                </div>
             </div>
         </div>
     </div>

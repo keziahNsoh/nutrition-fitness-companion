@@ -13,6 +13,7 @@ from fitness.models import Exercise, ExerciseCategory, WorkoutLog
 def fitness_view(request):
     user = request.user
     exercises = Exercise.objects.all()
+    
     workout_log = WorkoutLog.objects.all()
     context = {
         "fitness_goal": user.fitness_goal,
@@ -125,3 +126,13 @@ def create_workout(request):
         'workout_exercise_formset': workout_exercise_formset,
     })
 
+
+@login_required
+def delete_workout(request, workout_id):
+    workout_log = get_object_or_404(WorkoutLog, id=workout_id, user=request.user)
+    if request.method == 'POST':
+        workout_log.exercises.all().delete()
+        workout_log.delete()
+        messages.success(request, 'Workout deleted successfully.')
+        return redirect('fitness')
+    return render(request, 'delete_workout.html', {'workout_log': workout_log})
